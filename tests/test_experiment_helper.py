@@ -89,6 +89,7 @@ class TestExperimentConfiguration(TestCase):
         self.assertTrue(any(meets_criteria))
 
     def umap_matches_criteria(self, umap_parameter):
+        #TODO add the same criteria for clustering
         is_neighbours_correct = isinstance(umap_parameter.n_neighbours, int)
         is_n_components_correct = isinstance(umap_parameter.n_neighbours, int)
         is_metric_correct = isinstance(umap_parameter.metric, str)
