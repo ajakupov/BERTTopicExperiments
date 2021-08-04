@@ -1,4 +1,6 @@
 import itertools
+
+from random import choice
 from sentence_transformers import SentenceTransformer
 
 from model.ClusteringParameters import ClusteringParameters
@@ -122,3 +124,29 @@ def generate_models(data):
         sentence_embeddings.append(construct_sentence_model(model, data))
 
     return sentence_embeddings
+
+
+def generate_random_model(data):
+    pre_trained_models = ['paraphrase-mpnet-base-v2',
+                         'paraphrase-multilingual-mpnet-base-v2',
+                         'paraphrase-TinyBERT-L6-v2',
+                         'paraphrase-distilroberta-base-v2',
+                         'paraphrase-MiniLM-L12-v2',
+                         'paraphrase-MiniLM-L6-v2',
+                         'paraphrase-albert-small-v2',
+                         'paraphrase-multilingual-MiniLM-L12-v2',
+                         'paraphrase-MiniLM-L3-v2',
+                         'nli-mpnet-base-v2',
+                         'stsb-mpnet-base-v2',
+                         'distiluse-base-multilingual-cased-v1',
+                         'stsb-distilroberta-base-v2',
+                         'nli-roberta-base-v2',
+                         'stsb-roberta-base-v2',
+                         'nli-distilroberta-base-v2',
+                         'distiluse-base-multilingual-cased-v2',
+                         'average_word_embeddings_komninos',
+                         'average_word_embeddings_glove.6B.300d']
+
+    sentence_embedding = construct_sentence_model(choice(pre_trained_models), data)
+
+    return sentence_embedding

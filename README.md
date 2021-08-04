@@ -11,6 +11,16 @@ grid of hyperparameters that are fine-tuned during the experimentation. Thus, I'
 repository, and steadily, step-by-step, implement this pipeline, to be able to make a profound 
 models/hyperparameters comparison. 
 
+## Data
+For the experiment we used Ott Deceptive Opinion Spam corpus 
+composed of 400 truthful and 400 gold-standard deceptive reviews. 
+To solicit these high-quality deceptive reviews using Amazon Mechanical Turk, 
+a pool of 400 Human-Intelligence Tasks (HITs) has been created. 
+These HITs have been then allocated across 20 chosen hotels. 
+They have also ensured that opinions are written by unique reviewers, by allowing only a 
+single submission per Turker. For truthful opinions they mined 6977 reviews from the 20 most popular 
+Chicago hotels on Trip Advisor. With their dataset the authors have shown that the detection of deception 
+is challenging for human judges, as most of them performed roughly at-chance.
 
 ## Install packages and requirements
 *(As certain packages are only compatible with Linux environment, all the commands mentioned below will be 
