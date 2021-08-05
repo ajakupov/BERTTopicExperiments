@@ -5,7 +5,7 @@ from sentence_transformers import SentenceTransformer
 
 from model.ClusteringParameters import ClusteringParameters
 from model.UMAPParameters import UMAPPArameters
-from model.ExperimentParameters import ExperimentParameters
+from model.SentenceModel import SentenceModel
 
 
 def generate_umap_params():
@@ -94,7 +94,8 @@ def construct_sentence_model(model_name, data):
     model = SentenceTransformer(model_name)
     embeddings = model.encode(data, show_progress_bar=True)
 
-    return embeddings
+    sentence_model = SentenceModel(model_name, embeddings)
+    return sentence_model
 
 
 def generate_models(data):
@@ -118,35 +119,38 @@ def generate_models(data):
                           'average_word_embeddings_komninos',
                           'average_word_embeddings_glove.6B.300d']
 
-    sentence_embeddings = []
+    sentence_models = []
 
     for model in pre_trained_models:
-        sentence_embeddings.append(construct_sentence_model(model, data))
+        sentence_models.append(construct_sentence_model(model, data))
 
-    return sentence_embeddings
+    return sentence_models
 
 
 def generate_random_model(data):
     pre_trained_models = ['paraphrase-mpnet-base-v2',
-                         'paraphrase-multilingual-mpnet-base-v2',
-                         'paraphrase-TinyBERT-L6-v2',
-                         'paraphrase-distilroberta-base-v2',
-                         'paraphrase-MiniLM-L12-v2',
-                         'paraphrase-MiniLM-L6-v2',
-                         'paraphrase-albert-small-v2',
-                         'paraphrase-multilingual-MiniLM-L12-v2',
-                         'paraphrase-MiniLM-L3-v2',
-                         'nli-mpnet-base-v2',
-                         'stsb-mpnet-base-v2',
-                         'distiluse-base-multilingual-cased-v1',
-                         'stsb-distilroberta-base-v2',
-                         'nli-roberta-base-v2',
-                         'stsb-roberta-base-v2',
-                         'nli-distilroberta-base-v2',
-                         'distiluse-base-multilingual-cased-v2',
-                         'average_word_embeddings_komninos',
-                         'average_word_embeddings_glove.6B.300d']
+                          'paraphrase-multilingual-mpnet-base-v2',
+                          'paraphrase-TinyBERT-L6-v2',
+                          'paraphrase-distilroberta-base-v2',
+                          'paraphrase-MiniLM-L12-v2',
+                          'paraphrase-MiniLM-L6-v2',
+                          'paraphrase-albert-small-v2',
+                          'paraphrase-multilingual-MiniLM-L12-v2',
+                          'paraphrase-MiniLM-L3-v2',
+                          'nli-mpnet-base-v2',
+                          'stsb-mpnet-base-v2',
+                          'distiluse-base-multilingual-cased-v1',
+                          'stsb-distilroberta-base-v2',
+                          'nli-roberta-base-v2',
+                          'stsb-roberta-base-v2',
+                          'nli-distilroberta-base-v2',
+                          'distiluse-base-multilingual-cased-v2',
+                          'average_word_embeddings_komninos',
+                          'average_word_embeddings_glove.6B.300d']
 
-    sentence_embedding = construct_sentence_model(choice(pre_trained_models), data)
+    random_model_name = choice(pre_trained_models)
+    random_sentence_embedding = construct_sentence_model(random_model_name, data)
 
-    return sentence_embedding
+    random_sentence_model = SentenceModel(random_model_name, random_sentence_embedding)
+
+    return random_sentence_model

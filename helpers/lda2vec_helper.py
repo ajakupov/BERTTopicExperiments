@@ -1,2 +1,0 @@
-from lda2vec import embedding_mixture
-from lda2vec import dirichlet_likelihood

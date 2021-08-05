@@ -1,13 +1,12 @@
 from random import choice
 from unittest import TestCase
 
+import pandas as pd
+import numpy as np
+
 from helpers.experiment_helper import generate_umap_params, generate_clustering_params, generate_random_model
 from helpers.file_helper import get_ott_negative
 from model.Experiment import Experiment
-
-
-def generate_random_umap():
-    return choice(generate_umap_params())
 
 
 def umap_matches_criteria(umap_parameter):
@@ -17,10 +16,22 @@ def umap_matches_criteria(umap_parameter):
 
     return is_neighbours_correct and is_n_components_correct and is_metric_correct
 
+def generate_random_umap():
+    return choice(generate_umap_params())
 
 def generate_random_clustering_param():
     return choice(generate_clustering_params())
 
+def generate_random_experiment():
+    # generate random params
+    negative_reviews = get_ott_negative()
+    random_model = generate_random_model(negative_reviews)
+    random_umap = generate_random_umap()
+    random_clustering_param = generate_random_clustering_param()
+
+    experiment = Experiment(random_model, random_umap, random_clustering_param)
+
+    return experiment
 
 def clustering_matches_criteria(clustering_parameter):
     is_size_correct = isinstance(clustering_parameter.min_cluster_size, int)
@@ -124,11 +135,14 @@ class TestExperimentConfiguration(TestCase):
         """
         1 experiment = 1 model, 1 set of umap params, 1 set of clustering params
         """
-        # generate random params
-        negative_reviews = get_ott_negative()
-        random_model = generate_random_model(negative_reviews)
-        random_umap = generate_random_umap()
-        random_clustering_param = generate_random_clustering_param()
+        experiment = generate_random_experiment()
 
-        experiment = Experiment(random_model, random_umap, random_clustering_param)
+        self.assertTrue(isinstance(experiment.get_result(), pd.DataFrame))
 
+    def test_model_reduction(self):
+        experiment = generate_random_experiment()
+
+        reduced_embedding = experiment.reduce_dimensionality()
+        model_reducer = experiment.model_reducer
+
+        assert (np.all(reduced_embedding == model_reducer.embedding_))
