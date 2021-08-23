@@ -1,12 +1,12 @@
 class UMAPPArameters:
-    def __init__(self, n_neighbours, n_components, metric):
-        self.n_neighbours = n_neighbours
+    def __init__(self, n_neighbors, n_components, metric):
+        self.n_neighbors = n_neighbors
         self.n_components = n_components
         self.metric = metric
 
     def to_string(self):
-        return "Neighbours: {}, " \
+        return "Neighbors: {}, " \
                "Components: {}, " \
-               "Metric: {}".format(self.n_neighbours,
+               "Metric: {}".format(self.n_neighbors,
                                    self.n_components,
                                    self.metric)

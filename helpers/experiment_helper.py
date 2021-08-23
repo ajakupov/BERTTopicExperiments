@@ -6,42 +6,44 @@ from sentence_transformers import SentenceTransformer
 from model.ClusteringParameters import ClusteringParameters
 from model.UMAPParameters import UMAPPArameters
 from model.SentenceModel import SentenceModel
+from model.Experiment import Experiment
+
+from helpers.file_helper import get_ott_negative
 
 
 def generate_umap_params():
-    n_neighbours_values = range(2, 100)
+    n_neighbors_values = range(2, 100)
     n_components_values = range(2, 100)
-    metric_values = ['euclidean',
-                     'manhattan',
-                     'chebyshev',
-                     'minkowski',
-                     'canberra',
-                     'braycurtis',
-                     'mahalanobis',
-                     'wminkowski',
-                     'seuclidean',
-                     'cosine',
-                     'correlation',
-                     'haversine',
-                     'hamming',
-                     'jaccard',
-                     'dice',
-                     'russelrao',
-                     'kulsinski',
-                     'll_dirichlet',
-                     'hellinger',
-                     'rogerstanimoto',
-                     'sokalmichener',
-                     'sokalsneath',
-                     'yule']
+    metric_values = [
+        'euclidean',
+        'manhattan',
+        'chebyshev',
+        'minkowski',
+        'canberra',
+        'braycurtis',
+        'mahalanobis',
+        'wminkowski',
+        'seuclidean',
+        'cosine',
+        'correlation',
+        'hamming',
+        'jaccard',
+        'dice',
+        'russellrao',
+        'kulsinski',
+        'rogerstanimoto',
+        'sokalmichener',
+        'sokalsneath',
+        'yule'
+    ]
 
-    combinations_list = [n_neighbours_values, n_components_values, metric_values]
+    combinations_list = [n_neighbors_values, n_components_values, metric_values]
 
     parameters_list = []
 
     for element in itertools.product(*combinations_list):
-        (n_neighbours, n_components, metric) = element
-        umap_paremeter = UMAPPArameters(n_neighbours, n_components, metric)
+        (n_neighbors, n_components, metric) = element
+        umap_paremeter = UMAPPArameters(n_neighbors, n_components, metric)
         parameters_list.append(umap_paremeter)
 
     return parameters_list
@@ -149,8 +151,24 @@ def generate_random_model(data):
                           'average_word_embeddings_glove.6B.300d']
 
     random_model_name = choice(pre_trained_models)
-    random_sentence_embedding = construct_sentence_model(random_model_name, data)
-
-    random_sentence_model = SentenceModel(random_model_name, random_sentence_embedding)
+    random_sentence_model = construct_sentence_model(random_model_name, data)
 
     return random_sentence_model
+
+
+def generate_random_umap():
+    return choice(generate_umap_params())
+
+def generate_random_clustering_param():
+    return choice(generate_clustering_params())
+
+def generate_random_experiment():
+    # generate random params
+    negative_reviews = get_ott_negative()
+    random_model = generate_random_model(negative_reviews)
+    random_umap = generate_random_umap()
+    random_clustering_param = generate_random_clustering_param()
+
+    experiment = Experiment(random_model, random_umap, random_clustering_param)
+
+    return experiment

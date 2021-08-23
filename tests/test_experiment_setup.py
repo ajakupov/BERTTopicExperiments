@@ -4,34 +4,17 @@ from unittest import TestCase
 import pandas as pd
 import numpy as np
 
-from helpers.experiment_helper import generate_umap_params, generate_clustering_params, generate_random_model
-from helpers.file_helper import get_ott_negative
-from model.Experiment import Experiment
+from helpers.experiment_helper import generate_umap_params, generate_clustering_params
+from helpers.experiment_helper import generate_random_experiment
 
 
 def umap_matches_criteria(umap_parameter):
-    is_neighbours_correct = isinstance(umap_parameter.n_neighbours, int)
-    is_n_components_correct = isinstance(umap_parameter.n_neighbours, int)
+    is_neighbors_correct = isinstance(umap_parameter.n_neighbors, int)
+    is_n_components_correct = isinstance(umap_parameter.n_neighbors, int)
     is_metric_correct = isinstance(umap_parameter.metric, str)
 
-    return is_neighbours_correct and is_n_components_correct and is_metric_correct
+    return is_neighbors_correct and is_n_components_correct and is_metric_correct
 
-def generate_random_umap():
-    return choice(generate_umap_params())
-
-def generate_random_clustering_param():
-    return choice(generate_clustering_params())
-
-def generate_random_experiment():
-    # generate random params
-    negative_reviews = get_ott_negative()
-    random_model = generate_random_model(negative_reviews)
-    random_umap = generate_random_umap()
-    random_clustering_param = generate_random_clustering_param()
-
-    experiment = Experiment(random_model, random_umap, random_clustering_param)
-
-    return experiment
 
 def clustering_matches_criteria(clustering_parameter):
     is_size_correct = isinstance(clustering_parameter.min_cluster_size, int)
@@ -47,33 +30,32 @@ class TestExperimentConfiguration(TestCase):
         """
         Only test quantity without verifying the integrity
         """
-        n_neighbours_values = range(2, 100)
+        n_neighbors_values = range(2, 100)
         n_components_values = range(2, 100)
-        metric_values = ['euclidean',
-                         'manhattan',
-                         'chebyshev',
-                         'minkowski',
-                         'canberra',
-                         'braycurtis',
-                         'mahalanobis',
-                         'wminkowski',
-                         'seuclidean',
-                         'cosine',
-                         'correlation',
-                         'haversine',
-                         'hamming',
-                         'jaccard',
-                         'dice',
-                         'russelrao',
-                         'kulsinski',
-                         'll_dirichlet',
-                         'hellinger',
-                         'rogerstanimoto',
-                         'sokalmichener',
-                         'sokalsneath',
-                         'yule']
+        metric_values = [
+            'euclidean',
+            'manhattan',
+            'chebyshev',
+            'minkowski',
+            'canberra',
+            'braycurtis',
+            'mahalanobis',
+            'wminkowski',
+            'seuclidean',
+            'cosine',
+            'correlation',
+            'hamming',
+            'jaccard',
+            'dice',
+            'russellrao',
+            'kulsinski',
+            'rogerstanimoto',
+            'sokalmichener',
+            'sokalsneath',
+            'yule'
+        ]
 
-        all_combinations_number = len(metric_values)*len(n_components_values)*len(n_neighbours_values)
+        all_combinations_number = len(metric_values)*len(n_components_values)*len(n_neighbors_values)
         generated_combinations_number = len(generate_umap_params())
 
         self.assertEqual(generated_combinations_number, all_combinations_number)
@@ -139,10 +121,16 @@ class TestExperimentConfiguration(TestCase):
 
         self.assertTrue(isinstance(experiment.get_result(), pd.DataFrame))
 
-    def test_model_reduction(self):
+    def test_model_reduction_setup(self):
         experiment = generate_random_experiment()
 
         reduced_embedding = experiment.reduce_dimensionality()
-        model_reducer = experiment.model_reducer
 
-        assert (np.all(reduced_embedding == model_reducer.embedding_))
+        assert (reduced_embedding.shape[1]>0)
+
+    def test_model_reduction_integrity(self):
+        experiment = generate_random_experiment()
+
+        reduced_embedding = experiment.reduce_dimensionality()
+
+        self.assertEqual(reduced_embedding.shape[1], experiment.n_components)
