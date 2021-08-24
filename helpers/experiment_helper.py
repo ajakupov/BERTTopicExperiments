@@ -11,9 +11,55 @@ from model.Experiment import Experiment
 from helpers.file_helper import get_ott_negative
 
 
+def generate_experiments():
+    experiments = []
+
+    negative_reviews = get_ott_negative()
+    sentence_models = generate_models(negative_reviews)
+    umap_params = generate_umap_params()
+    clustering_params = generate_clustering_params()
+
+    for sentence_model in sentence_models:
+        for umap_param in umap_params:
+            for clustering_param in clustering_params:
+                experiment = Experiment(sentence_model, umap_param, clustering_param)
+                experiments.append(experiment)
+
+    return experiments
+
+
+def generate_models(data):
+    pre_trained_models = ['paraphrase-mpnet-base-v2',
+                          'paraphrase-multilingual-mpnet-base-v2',
+                          'paraphrase-TinyBERT-L6-v2',
+                          'paraphrase-distilroberta-base-v2',
+                          'paraphrase-MiniLM-L12-v2',
+                          'paraphrase-MiniLM-L6-v2',
+                          'paraphrase-albert-small-v2',
+                          'paraphrase-multilingual-MiniLM-L12-v2',
+                          'paraphrase-MiniLM-L3-v2',
+                          'nli-mpnet-base-v2',
+                          'stsb-mpnet-base-v2',
+                          'distiluse-base-multilingual-cased-v1',
+                          'stsb-distilroberta-base-v2',
+                          'nli-roberta-base-v2',
+                          'stsb-roberta-base-v2',
+                          'nli-distilroberta-base-v2',
+                          'distiluse-base-multilingual-cased-v2',
+                          'average_word_embeddings_komninos',
+                          'average_word_embeddings_glove.6B.300d']
+
+    sentence_models = []
+
+    for model in pre_trained_models:
+        sentence_models.append(construct_sentence_model(model, data))
+
+    return sentence_models
+
+
 def generate_umap_params():
-    n_neighbors_values = range(2, 100)
-    n_components_values = range(2, 100)
+    n_neighbors_values = range(2, 20)
+    n_components_values = range(2, 20)
     metric_values = [
         'euclidean',
         'manhattan',
@@ -50,7 +96,7 @@ def generate_umap_params():
 
 
 def generate_clustering_params():
-    min_cluster_size_values = range(1, 20)
+    min_cluster_size_values = range(10, 20)
 
     metric_values = ['braycurtis',
                      'canberra',
@@ -59,7 +105,6 @@ def generate_clustering_params():
                      'dice',
                      'euclidean',
                      'hamming',
-                     'haversine',
                      'infinity',
                      'jaccard',
                      'kulsinski',
@@ -100,33 +145,16 @@ def construct_sentence_model(model_name, data):
     return sentence_model
 
 
-def generate_models(data):
-    pre_trained_models = ['paraphrase-mpnet-base-v2',
-                          'paraphrase-multilingual-mpnet-base-v2',
-                          'paraphrase-TinyBERT-L6-v2',
-                          'paraphrase-distilroberta-base-v2',
-                          'paraphrase-MiniLM-L12-v2',
-                          'paraphrase-MiniLM-L6-v2',
-                          'paraphrase-albert-small-v2',
-                          'paraphrase-multilingual-MiniLM-L12-v2',
-                          'paraphrase-MiniLM-L3-v2',
-                          'nli-mpnet-base-v2',
-                          'stsb-mpnet-base-v2',
-                          'distiluse-base-multilingual-cased-v1',
-                          'stsb-distilroberta-base-v2',
-                          'nli-roberta-base-v2',
-                          'stsb-roberta-base-v2',
-                          'nli-distilroberta-base-v2',
-                          'distiluse-base-multilingual-cased-v2',
-                          'average_word_embeddings_komninos',
-                          'average_word_embeddings_glove.6B.300d']
+def generate_random_experiment():
+    # generate random params
+    negative_reviews = get_ott_negative()
+    random_model = generate_random_model(negative_reviews)
+    random_umap = generate_random_umap()
+    random_clustering_param = generate_random_clustering_param()
 
-    sentence_models = []
+    experiment = Experiment(random_model, random_umap, random_clustering_param)
 
-    for model in pre_trained_models:
-        sentence_models.append(construct_sentence_model(model, data))
-
-    return sentence_models
+    return experiment
 
 
 def generate_random_model(data):
@@ -159,16 +187,8 @@ def generate_random_model(data):
 def generate_random_umap():
     return choice(generate_umap_params())
 
+
 def generate_random_clustering_param():
     return choice(generate_clustering_params())
 
-def generate_random_experiment():
-    # generate random params
-    negative_reviews = get_ott_negative()
-    random_model = generate_random_model(negative_reviews)
-    random_umap = generate_random_umap()
-    random_clustering_param = generate_random_clustering_param()
 
-    experiment = Experiment(random_model, random_umap, random_clustering_param)
-
-    return experiment

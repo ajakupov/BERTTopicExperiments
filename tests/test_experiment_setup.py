@@ -30,8 +30,8 @@ class TestExperimentConfiguration(TestCase):
         """
         Only test quantity without verifying the integrity
         """
-        n_neighbors_values = range(2, 100)
-        n_components_values = range(2, 100)
+        n_neighbors_values = range(2, 20)
+        n_components_values = range(2, 20)
         metric_values = [
             'euclidean',
             'manhattan',
@@ -61,7 +61,7 @@ class TestExperimentConfiguration(TestCase):
         self.assertEqual(generated_combinations_number, all_combinations_number)
 
     def test_cluster_parameters_quantity(self):
-        min_cluster_size_values = range(1, 20)
+        min_cluster_size_values = range(10, 20)
 
         metric_values = ['braycurtis',
                          'canberra',
@@ -70,7 +70,6 @@ class TestExperimentConfiguration(TestCase):
                          'dice',
                          'euclidean',
                          'hamming',
-                         'haversine',
                          'infinity',
                          'jaccard',
                          'kulsinski',
@@ -134,3 +133,17 @@ class TestExperimentConfiguration(TestCase):
         reduced_embedding = experiment.reduce_dimensionality()
 
         self.assertEqual(reduced_embedding.shape[1], experiment.n_components)
+
+
+    def test_clustering_setup(self):
+        experiment = generate_random_experiment()
+        cluster = experiment.clusterize()
+
+        self.assertIsNotNone(cluster.labels_)
+
+    def test_clustering_integrity(self):
+        experiment = generate_random_experiment()
+        cluster = experiment.clusterize()
+        print (set(cluster.labels_))
+        print(len(set(cluster.labels_)))
+        self.assertTrue(len(set(cluster.labels_)) > 0)
