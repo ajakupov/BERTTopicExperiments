@@ -29,25 +29,7 @@ def generate_experiments():
 
 
 def generate_models(data):
-    pre_trained_models = ['paraphrase-mpnet-base-v2',
-                          'paraphrase-multilingual-mpnet-base-v2',
-                          'paraphrase-TinyBERT-L6-v2',
-                          'paraphrase-distilroberta-base-v2',
-                          'paraphrase-MiniLM-L12-v2',
-                          'paraphrase-MiniLM-L6-v2',
-                          'paraphrase-albert-small-v2',
-                          'paraphrase-multilingual-MiniLM-L12-v2',
-                          'paraphrase-MiniLM-L3-v2',
-                          'nli-mpnet-base-v2',
-                          'stsb-mpnet-base-v2',
-                          'distiluse-base-multilingual-cased-v1',
-                          'stsb-distilroberta-base-v2',
-                          'nli-roberta-base-v2',
-                          'stsb-roberta-base-v2',
-                          'nli-distilroberta-base-v2',
-                          'distiluse-base-multilingual-cased-v2',
-                          'average_word_embeddings_komninos',
-                          'average_word_embeddings_glove.6B.300d']
+    pre_trained_models = ['paraphrase-mpnet-base-v2']
 
     sentence_models = []
 

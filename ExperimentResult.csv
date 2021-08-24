@@ -1,0 +1,16 @@
+Model Name,Umap N Neighbors,Umap N Components,Umap Metric,Cluster Size,Cluster Metric,Cluster Selection Method,Number of clusters
+paraphrase-mpnet-base-v2,2,2,braycurtis,10,braycurtis,eom,70
+paraphrase-mpnet-base-v2,2,2,canberra,10,canberra,eom,73
+paraphrase-mpnet-base-v2,2,2,chebyshev,10,chebyshev,eom,57
+paraphrase-mpnet-base-v2,2,2,cityblock,10,cityblock,eom,0
+paraphrase-mpnet-base-v2,2,2,dice,10,dice,eom,1
+paraphrase-mpnet-base-v2,2,2,euclidean,10,euclidean,eom,72
+paraphrase-mpnet-base-v2,2,2,hamming,10,hamming,eom,1
+paraphrase-mpnet-base-v2,2,2,infinity,10,infinity,eom,0
+paraphrase-mpnet-base-v2,2,2,jaccard,10,jaccard,eom,1
+paraphrase-mpnet-base-v2,2,2,kulsinski,10,kulsinski,eom,1
+paraphrase-mpnet-base-v2,2,2,l1,10,l1,eom,65
+paraphrase-mpnet-base-v2,2,2,l2,10,l2,eom,68
+paraphrase-mpnet-base-v2,2,2,mahalanobis,10,mahalanobis,eom,0
+paraphrase-mpnet-base-v2,2,2,manhattan,10,manhattan,eom,66
+paraphrase-mpnet-base-v2,2,2,matching,10,matching,eom,1
