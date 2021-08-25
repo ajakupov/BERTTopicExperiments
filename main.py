@@ -10,8 +10,8 @@ if __name__ == '__main__':
     output = pd.DataFrame()
     for experiment in generate_experiments():
         start = datetime.now()
+        print(experiment.to_string())
         output = output.append(experiment.get_result())
         output.to_csv("ExperimentResult.csv", index=False)
-        print (experiment.to_string())
         end = datetime.now()
         print(end - start)

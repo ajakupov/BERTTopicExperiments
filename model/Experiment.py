@@ -8,9 +8,9 @@ class Experiment:
         self.sentence_model = sentence_model
         self.n_neighbors = umap_parameters.n_neighbors
         self.n_components = umap_parameters.n_components
-        self.metric = umap_parameters.metric
+        self.umap_metric = umap_parameters.metric
         self.min_cluster_size = clustering_parameters.min_cluster_size
-        self.metric = clustering_parameters.metric
+        self.cluster_metric = clustering_parameters.metric
         self.cluster_selection_method = clustering_parameters.cluster_selection_method
 
     def get_result(self):
@@ -19,10 +19,10 @@ class Experiment:
 
         result["Umap N Neighbors"] = pd.Series(self.n_neighbors)
         result["Umap N Components"] = pd.Series(self.n_components)
-        result["Umap Metric"] = pd.Series(self.metric)
+        result["Umap Metric"] = pd.Series(self.umap_metric)
 
         result["Cluster Size"] = pd.Series(self.min_cluster_size)
-        result["Cluster Metric"] = pd.Series(self.metric)
+        result["Cluster Metric"] = pd.Series(self.cluster_metric)
         result["Cluster Selection Method"] = pd.Series(self.cluster_selection_method)
 
         try:
@@ -37,7 +37,7 @@ class Experiment:
         return result
 
     def reduce_dimensionality(self):
-        model_reducer = umap.UMAP(n_neighbors=self.n_neighbors, n_components=self.n_components, metric=self.metric)
+        model_reducer = umap.UMAP(n_neighbors=self.n_neighbors, n_components=self.n_components, metric=self.umap_metric)
         reduced_embeddings = model_reducer.fit_transform(self.sentence_model.embeddings)
         return reduced_embeddings
 
@@ -45,14 +45,23 @@ class Experiment:
     def clusterize(self):
         reduced_embeddings = self.reduce_dimensionality()
         cluster = hdbscan.HDBSCAN(min_cluster_size=self.min_cluster_size,
-                                  metric=self.metric,
+                                  metric=self.cluster_metric,
                                   cluster_selection_method=self.cluster_selection_method).fit(reduced_embeddings)
         return cluster
 
 
     def to_string(self):
-        return "Model: {}, " \
-               "Components: {}, " \
-               "Cluster Size: {}".format(self.sentence_model,
-                                         self.n_components,
-                                         self.min_cluster_size)
+        return "Sentence model: {}, " \
+               "Umap components: {}, " \
+               "Umap neighbors: {}, " \
+               "Umap metric: {}, " \
+               "Cluster size: {}, " \
+               "Cluster metric: {}, " \
+               "Cluster selection method: {}".format(self.sentence_model.model_name,
+                                                     self.n_components,
+                                                     self.n_neighbors,
+                                                     self.umap_metric,
+                                                     self.min_cluster_size,
+                                                     self.cluster_metric,
+                                                     self.cluster_selection_method
+                                                     )
