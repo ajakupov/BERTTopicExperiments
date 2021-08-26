@@ -40,29 +40,11 @@ def generate_models(data):
 
 
 def generate_umap_params():
-    n_neighbors_values = range(2, 20)
-    n_components_values = range(2, 20)
+    n_neighbors_values = range(10, 15)
+    n_components_values = range(10, 15)
     metric_values = [
-        'euclidean',
-        'manhattan',
-        'chebyshev',
-        'minkowski',
-        'canberra',
-        'braycurtis',
-        'mahalanobis',
-        'wminkowski',
-        'seuclidean',
         'cosine',
-        'correlation',
-        'hamming',
-        'jaccard',
-        'dice',
-        'russellrao',
-        'kulsinski',
-        'rogerstanimoto',
-        'sokalmichener',
-        'sokalsneath',
-        'yule'
+        'correlation'
     ]
 
     combinations_list = [n_neighbors_values, n_components_values, metric_values]
@@ -78,32 +60,11 @@ def generate_umap_params():
 
 
 def generate_clustering_params():
-    min_cluster_size_values = range(10, 20)
+    min_cluster_size_values = range(50, 55)
 
-    metric_values = ['braycurtis',
-                     'canberra',
-                     'chebyshev',
-                     'cityblock',
-                     'dice',
+    metric_values = ['chebyshev',
                      'euclidean',
-                     'hamming',
-                     'infinity',
-                     'jaccard',
-                     'kulsinski',
-                     'l1',
-                     'l2',
-                     'mahalanobis',
-                     'manhattan',
-                     'matching',
-                     'minkowski',
-                     'p',
-                     'pyfunc',
-                     'rogerstanimoto',
-                     'russellrao',
-                     'seuclidean',
-                     'sokalmichener',
-                     'sokalsneath',
-                     'wminkowski']
+                     'p']
 
     cluster_selection_method_values = ['eom', 'leaf']
 
