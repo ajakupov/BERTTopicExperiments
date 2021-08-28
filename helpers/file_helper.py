@@ -16,4 +16,4 @@ def read_ott_deceptive():
 def get_ott_negative():
     ott_dataframe = read_ott_deceptive()
     ott_dataframe_negative = ott_dataframe[ott_dataframe['polarity']=='negative']
-    return ott_dataframe['text']
+    return ott_dataframe_negative['text']
