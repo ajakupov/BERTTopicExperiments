@@ -6,7 +6,6 @@ from helpers.file_helper import get_ott_negative
 from helpers.experiment_helper import generate_experiments
 
 if __name__ == '__main__':
-    negative_reviews = get_ott_negative()
     output = pd.DataFrame()
 
     experiments = generate_experiments()
